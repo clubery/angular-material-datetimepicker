@@ -13,7 +13,7 @@
     "front-end",
     "web"
   ],
-  "homepage": "https://logbon72.github.io/angular-material-datetimepicker",
+  "homepage": "https://clubery.github.io/angular-material-datetimepicker/",
   "main": [
     "js/angular-material-datetimepicker.js",
     "css/material-datetimepicker.css"

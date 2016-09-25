@@ -1,0 +1,71 @@
+diff --git a/README.md b/README.md
+index 99aca06..62c33b9 100644
+--- a/README.md
++++ b/README.md
+@@ -93,3 +93,4 @@ The directive accepts several attributes which are described below:
+ | **time**			| Boolean						| true => Has Timepicker (default: true)		|
+ | **cancel-text**	| String						| Text for the cancel button (default: Cancel)	|
+ | **ok-text**		| String						| Text for the OK button (default: OK)			|
++| **on-change**		| Function						| Callback which will be executed when the date will be applied (example: `on-change="onChange($dateTime)"`) `$dateTime` will be a moment object | 			|
+\ No newline at end of file
+diff --git a/index.html b/index.html
+index 8026dcd..d25e51e 100644
+--- a/index.html
++++ b/index.html
+@@ -36,7 +36,7 @@
+                     <label>Datepicker Only</label>
+                     <input time="false" date="true" mdc-datetime-picker type="text" id="date"
+                            placeholder="Date"
+-                           ng-model="date" min-date="minDate" max-date="maxDate">
++                           ng-model="date" min-date="minDate" max-date="maxDate" on-change="onChange($dateTime)">
+                 </md-input-container>
+                 <div  flex-gt-md="grow" flex-md="initial" ex-source-code target="input"></div>
+             </div>
+@@ -60,7 +60,7 @@
+                            min-date="minDate"
+                            format="HH:mm"
+                            ng-model="time">
+-                </md-input-container>
++                </md-input-container>`
+                 <div  flex-gt-md="grow" ex-source-code target="input"></div>
+             </div>
+ 
+diff --git a/js/angular-material-datetimepicker.js b/js/angular-material-datetimepicker.js
+index c7957a1..8e4107d 100644
+--- a/js/angular-material-datetimepicker.js
++++ b/js/angular-material-datetimepicker.js
+@@ -96,7 +96,8 @@
+             okText: '@',
+             lang: '@',
+             amText: '@',
+-            pmText: '@'
++            pmText: '@',
++            onChange: '&'
+           },
+           link: function (scope, element, attrs, ngModel) {
+             var isOn = false;
+@@ -153,6 +154,9 @@
+                   skipHide: true
+                 })
+                 .then(function (v) {
++                  scope.onChange({
++                    $dateTime: v
++                  });
+                   scope.currentDate = v ? v._d : v;
+                   isOn = false;
+                 }, function () {
+diff --git a/js/demo.js b/js/demo.js
+index 066d23d..0351126 100644
+--- a/js/demo.js
++++ b/js/demo.js
+@@ -12,7 +12,9 @@
+       $scope.dateTime = new Date();
+       $scope.minDate = moment().subtract(1, 'month');
+       $scope.maxDate = moment().add(1, 'month');
+-
++      $scope.onChange = function($dateTime) {
++        console.log($dateTime);
++      }
+     })
+ 
+     .directive('exSourceCode', function () {
